@@ -1,9 +1,8 @@
 const express = require('express');
 const app = express();
 const fileUpload = require('express-fileupload');
+const fs = require('fs');
 const port = 8080;
-
-var bodyParser = require('body-parser')
 
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
@@ -19,6 +18,10 @@ app.get('/app.js', (req, res, next) => {
     res.sendFile(__dirname + '/client/app.js');
 })
 
+app.get('/file', (req, res, next) => {
+    //res.sendFile(__dirname + '/csv.txt');
+})
+
 app.post('/', (req, res, next) => {
     var json;
     if (req.headers.json) {
@@ -28,7 +31,8 @@ app.post('/', (req, res, next) => {
     }
 
     var csv = handleJSON(json);
-    res.send(getColumns(json) + csv);
+    csv = getColumns(json) + csv;
+    res.send(csv);
 })  
 
 app.listen(port, () => {
@@ -36,7 +40,6 @@ app.listen(port, () => {
 });
 
 var getColumns = (input) => {
-    console.log("I:",input);
     var keys = Object.keys(input);
     var columnString = '';
 

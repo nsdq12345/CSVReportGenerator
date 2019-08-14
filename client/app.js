@@ -1,3 +1,51 @@
+$('#submitButton').on('click', () => {
+    console.log("TEST");
+    $.ajax({
+        url: 'http://localhost:8080/',
+        method: 'POST',
+        headers: {
+            json: $('#inputField')[0].value
+        },
+        success: function(data){
+            $('#results').text(data);
+
+            $('#download').on('click', () => {
+                var link = document.createElement('a');
+                link.setAttribute('download', 'json.txt');
+                link.setAttribute('href', 'data:text/plain;charset=utf-8,' + data);
+                link.click();
+            });
+        }
+    });
+});
+
+
+$('#submitFileButton').on('click', () => {
+    console.log("TEST");
+    var fileToSend = $('#fileInput')[0].files[0];
+    var fd = new FormData();
+    fd.append('upload', fileToSend);
+
+    $.ajax({
+        url: 'http://localhost:8080/',
+        method: 'POST',
+        data: fd,
+        processData: false,
+        contentType: false,
+        success: function(data){
+            $('#results').text(data);
+
+            $('#download').on('click', () => {
+                var link = document.createElement('a');
+                link.setAttribute('download', 'json.txt');
+                link.setAttribute('href', 'data:text/plain;charset=utf-8,' + data);    
+                link.click();
+            });
+        }
+    });
+});
+
+/*
 var req = new XMLHttpRequest();
 
 $('#submitButton').on('click', () => {
@@ -28,3 +76,4 @@ $('#submitFileButton').on('click', () => {
         $('#results').text(req.response);
     }
 });
+*/
