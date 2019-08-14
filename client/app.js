@@ -1,5 +1,53 @@
+var url = 'http://localhost:8080/';
+
 $('#submitButton').on('click', () => {
-    console.log("TEST");
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            json: $('#inputField')[0].value
+        }
+    })
+    .then((data) => {
+        return data.text();
+    })
+    .then(data => {
+        $('#results').text(data);
+
+        $('#download').on('click', () => {
+            var link = document.createElement('a');
+            link.setAttribute('download', 'json.txt');
+            link.setAttribute('href', 'data:text/plain;charset=utf-8,' + data);
+            link.click();
+        });
+    });
+});
+
+$('#submitFileButton').on('click', () => {
+    var fileToSend = $('#fileInput')[0].files[0];
+    var fd = new FormData();
+    fd.append('upload', fileToSend);
+
+    fetch(url, {
+        method: 'POST',
+        body: fd
+    })
+    .then(data => {
+        return data.text();
+    })
+    .then(data => {
+        $('#results').text(data);
+
+        $('#download').on('click', () => {
+            var link = document.createElement('a');
+            link.setAttribute('download', 'json.txt');
+            link.setAttribute('href', 'data:text/plain;charset=utf-8,' + data);    
+            link.click();
+        });
+    })
+});
+
+/*
+$('#submitButton').on('click', () => {
     $.ajax({
         url: 'http://localhost:8080/',
         method: 'POST',
@@ -21,7 +69,6 @@ $('#submitButton').on('click', () => {
 
 
 $('#submitFileButton').on('click', () => {
-    console.log("TEST");
     var fileToSend = $('#fileInput')[0].files[0];
     var fd = new FormData();
     fd.append('upload', fileToSend);
@@ -43,7 +90,7 @@ $('#submitFileButton').on('click', () => {
             });
         }
     });
-});
+});*/
 
 /*
 var req = new XMLHttpRequest();
